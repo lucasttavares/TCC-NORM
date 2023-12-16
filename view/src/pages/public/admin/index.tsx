@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Container } from './styles';
 import { Button, Form, Input } from 'antd';
 import api from '../../../services/api';
@@ -45,8 +45,7 @@ const LoginAdmin: React.FC = () => {
         </Form.Item>
 
         <Form.Item label="Senha:">
-          <Input
-            type="password"
+          <Input.Password
             placeholder="Digite sua senha"
             value={password}
             onChange={e => {

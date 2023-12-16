@@ -1,18 +1,22 @@
 import React, { FormEvent, useState } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, DatePicker, Form, Input, Select, notification } from 'antd';
 import { Container } from './styles';
 import api from '../../../services/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FormAdmin: React.FC = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [pdf, setPdf] = useState<File | null>(null);
   const [description, setDescription] = useState('');
   const [type, setType] = useState('');
   const [course, setCourse] = useState('');
+  const [date, setDate] = useState<any>();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    const key = localStorage.getItem('token');
 
     const formData = new FormData();
     if (pdf) {
@@ -22,16 +26,28 @@ const FormAdmin: React.FC = () => {
     formData.append('description', description);
     formData.append('type', type);
     formData.append('course', course);
+    formData.append('date', date);
 
-    await api
-      .post('/norm/addNorm', formData)
-      .then(resp => {
-        console.log(resp);
-      })
-      .catch(err => {
-        console.log(err);
-        alert('Não foi possível concluir a publicação');
+    try {
+      const resp = await api.post('/norm/addNorm', formData, {
+        headers: {
+          Authorization: `${key}`,
+        },
       });
+      console.log(resp);
+      notification.success({
+        message: 'Publicação bem sucedida',
+      });
+    } catch (err: any) {
+      console.log(err);
+      if (err.response && err.response.status === 401) {
+        notification.warning({
+          message: 'Token expirado',
+          description: 'Por favor, faça login novamente',
+        });
+        navigate('/admin');
+      }
+    }
   };
 
   function clearStorage() {
@@ -71,22 +87,93 @@ const FormAdmin: React.FC = () => {
             }}
           />
         </Form.Item>
-        <Form.Item label="Tipo de documento:">
-          <Input
-            placeholder="Digite o tipo do documento"
-            value={type}
-            onChange={e => {
-              setType(e.target.value);
+        <Form.Item label="Selecione a Data de publicação">
+          <DatePicker
+            format={'DD/MM/YYYY'}
+            onChange={(value: any) => {
+              const formatDate = new Date(value).toISOString().split('T')[0];
+              setDate(formatDate);
             }}
           />
         </Form.Item>
-        <Form.Item label="Curso:">
-          <Input
-            placeholder="Digite para qual curso o documento está direcionado"
-            value={course}
-            onChange={e => {
-              setCourse(e.target.value);
+        <Form.Item label="Tipo de documento:">
+          <Select
+            placeholder="Selecione o tipo de publicação desejada"
+            onChange={value => {
+              setType(value);
             }}
+            options={[
+              {
+                label: 'Institucional',
+                value: 'Institucional',
+              },
+              {
+                label: 'Edital',
+                value: 'Edital',
+              },
+              {
+                label: 'Informativo',
+                value: 'Informativo',
+              },
+              {
+                label: 'Lista',
+                value: 'Lista',
+              },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item label="Curso:">
+          <Select
+            placeholder="Selecione para qual curso a publicação é destinada"
+            onChange={value => {
+              setCourse(value);
+            }}
+            options={[
+              {
+                label: 'Análise e Desenvolvimento de Sistemas',
+                value: 'Análise e Desenvolvimento de Sistemas',
+              },
+              {
+                label: 'Automação Industrial',
+                value: 'Automação Industrial',
+              },
+              {
+                label: 'Computação e Informática',
+                value: 'Computação e Informática',
+              },
+              {
+                label: 'Desenho de Construção Civil (PROEJA)',
+                value: 'Desenho de Construção Civil (PROEJA)',
+              },
+              {
+                label: 'Edificações',
+                value: 'Edificações',
+              },
+              {
+                label: 'Eletromecânica',
+                value: 'Eletromecânica',
+              },
+              {
+                label: 'Engenharia Civil',
+                value: 'Engenharia Civil',
+              },
+              {
+                label: 'Engenharia de Controle e Automação',
+                value: 'Engenharia de Controle e Automação',
+              },
+              {
+                label: 'Informática',
+                value: 'Informática',
+              },
+              {
+                label: 'Licenciatura em Matemática',
+                value: 'Licenciatura em Matemática',
+              },
+              {
+                label: 'Meio Ambiente (PROEJA)',
+                value: 'Meio Ambiente (PROEJA)',
+              },
+            ]}
           />
         </Form.Item>
         <Form.Item>

@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 interface NormI {
   _id: string;
   pdf: string;
@@ -9,7 +11,7 @@ interface NormI {
 }
 
 interface AdminRouteI {
-  children: any;
+  children: ReactNode;
   isPrivate: boolean;
 }
 

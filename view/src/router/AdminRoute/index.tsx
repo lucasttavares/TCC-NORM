@@ -7,7 +7,7 @@ const AdminRoute: React.FC<AdminRouteI> = ({ children, isPrivate }) => {
   const isAuthenticated = storage === `${process.env.REACT_APP_ADMIN_VALUE}`;
 
   if (isPrivate && !isAuthenticated) {
-    return <Navigate to="/admin" />;
+    return <Navigate to="/" />;
   }
 
   if (!isPrivate && isAuthenticated) {

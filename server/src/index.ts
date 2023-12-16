@@ -8,8 +8,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-require('./app/controllers/authController')(app);
-require('./app/controllers/projectController')(app);
-require('./app/controllers/normController')(app);
+require('./app/routes/auths.routes')(app);
+require('./app/routes/norms.routes')(app);
+require('./app/routes/profile.routes')(app);
 
 app.listen(3001);

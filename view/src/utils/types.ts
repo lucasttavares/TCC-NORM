@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
 
 interface NormI {
-  _id: string;
-  pdf: string;
-  title: string;
-  description: string;
-  type: string;
-  course: string;
-  date: string;
+  _id?: string;
+  link?: string;
+  title?: string;
+  description?: string;
+  type?: string;
+  course?: string;
+  date?: string;
+  year?: number;
+  isAdmin?: boolean;
 }
 
 interface AdminRouteI {

@@ -30,7 +30,7 @@ const Title = styled.h1`
 `;
 
 const InputSearch = styled(Input.Search)`
-  width: 90%;
+  width: 85%;
 `;
 
 const Row = styled.div`

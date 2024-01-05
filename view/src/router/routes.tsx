@@ -5,17 +5,18 @@ import Login from '../pages/public/login';
 import Register from '../pages/public/register';
 import Profile from '../pages/public/profile';
 import LoginAdmin from '../pages/public/admin';
-import FormAdmin from '../pages/private/admin';
+// import FormAdmin from '../pages/private/admin';
 import AdminRoute from './AdminRoute';
+import HomeAdmin from '../pages/private/home';
 
 const Router: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        {/*         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} /> */}
 
         <Route
           path="/admin"
@@ -26,11 +27,20 @@ const Router: React.FC = () => {
           }
         />
 
-        <Route
+        {/*         <Route
           path="/private/admin"
           element={
             <AdminRoute isPrivate={true}>
               <FormAdmin />
+            </AdminRoute>
+          }
+        /> */}
+
+        <Route
+          path="/private/home"
+          element={
+            <AdminRoute isPrivate={true}>
+              <HomeAdmin />
             </AdminRoute>
           }
         />

@@ -11,7 +11,7 @@ const AdminRoute: React.FC<AdminRouteI> = ({ children, isPrivate }) => {
   }
 
   if (!isPrivate && isAuthenticated) {
-    return <Navigate to="/private/admin" />;
+    return <Navigate to="/private/home" />;
   }
 
   return children;

@@ -1,26 +1,283 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NormI } from '../../utils/types';
+import {
+  Button,
+  DatePicker,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  notification,
+} from 'antd';
+import api from '../../services/api';
+import timezone from 'dayjs/plugin/timezone';
+import dayjs, { tz } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { FaRegTrashAlt, FaRegEdit } from 'react-icons/fa';
 
-// import { Container } from './styles';
+import {
+  AdminOptions,
+  ConfirmEditButton,
+  Container,
+  Content,
+  DeleteButton,
+  Description,
+  EditButton,
+  Infos,
+  Link,
+  PopConfirmIcon,
+  Title,
+} from './styles';
 
 const Norm: React.FC<NormI> = ({
   _id,
   title,
-  pdf,
+  link,
   description,
   type,
   course,
   date,
+  isAdmin,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [norm, setNorm] = useState<NormI>();
+  const [editForm] = Form.useForm();
+
+  const showModal = () => {
+    setNorm({ ...norm, title, description, type, course, date });
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const key = localStorage.getItem('token');
+
+  const deleteNorm = async (id: string) => {
+    const key = localStorage.getItem('token');
+    try {
+      await api.delete(`/norm/deleteNorm/${id}`, {
+        headers: { Authorization: `${key}` },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const editNorm = async (id: string) => {
+    await api
+      .put(
+        `/norm/updateNorm/`,
+        { ...norm, _id: id },
+        {
+          headers: { Authorization: `${key}` },
+        },
+      )
+      .then(resp => {
+        notification.success({
+          message: 'Edição bem sucedida',
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    console.log(id, norm?.title);
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    editForm.setFieldsValue({
+      titulo: norm?.title,
+      descricao: norm?.description,
+    });
+  }, [norm]);
+
+  dayjs.extend(utc);
+
   return (
-    <div key={_id} style={{ marginBottom: 10 }}>
-      <p>Title: {title}</p>
-      <p>PDF: {pdf}</p>
-      <p>Description: {description}</p>
-      <p>Type: {type}</p>
-      <p>Course: {course}</p>
-      <p>Date: {date}</p>
-    </div>
+    <Container key={_id}>
+      <Content>
+        <Title>
+          <Link href={link} target="_blank" rel="noreferrer">
+            {title?.toUpperCase()}
+          </Link>
+        </Title>
+        <Infos>
+          <p>{type}</p> <p>{`${dayjs(date).format('DD/MM/YYYY')}`}</p>
+          <p>{course}</p>
+        </Infos>
+        <Description>{description}</Description>
+        {isAdmin ? (
+          <AdminOptions>
+            <EditButton onClick={showModal}>
+              <p>Editar</p>
+              <FaRegEdit />
+            </EditButton>
+            <Popconfirm
+              title="Tem certeza?"
+              description="Deseja mesmo excluir este documento?"
+              onConfirm={() => {
+                deleteNorm(`${_id}`);
+              }}
+              okText="Sim"
+              cancelText="Não"
+              icon={<PopConfirmIcon />}
+            >
+              <DeleteButton>
+                <p>Excluir</p>
+                <FaRegTrashAlt />
+              </DeleteButton>
+            </Popconfirm>
+          </AdminOptions>
+        ) : null}
+        <Divider />
+      </Content>
+
+      <Modal
+        title="Editar documento"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={false}
+      >
+        <Form
+          layout="vertical"
+          form={editForm}
+          onFinish={() => editNorm(`${_id}`)}
+        >
+          <Form.Item
+            label="Titulo:"
+            name="titulo"
+            rules={[{ required: true, message: 'Insira o título' }]}
+          >
+            <Input
+              value={norm?.title}
+              onChange={e => {
+                setNorm({ ...norm, title: e.target.value });
+              }}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Descrição:"
+            name="descricao"
+            rules={[{ required: true, message: 'Insira uma descrição' }]}
+          >
+            <Input.TextArea
+              rows={4}
+              value={norm?.description}
+              onChange={e => {
+                setNorm({ ...norm, description: e.target.value });
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Tipo de Documento:">
+            <Select
+              value={norm?.type}
+              onChange={value => {
+                setNorm({ ...norm, type: value });
+              }}
+              options={[
+                {
+                  label: 'Edital',
+                  value: 'Edital',
+                },
+                {
+                  label: 'Informativo',
+                  value: 'Informativo',
+                },
+                {
+                  label: 'Lista',
+                  value: 'Lista',
+                },
+              ]}
+            />
+          </Form.Item>
+
+          <Form.Item label="Destinação:">
+            <Select
+              value={norm?.course}
+              onChange={value => {
+                setNorm({ ...norm, course: value });
+              }}
+              options={[
+                {
+                  label: 'Institucional',
+                  value: 'Institucional',
+                },
+                {
+                  label: 'Análise e Desenvolvimento de Sistemas',
+                  value: 'Análise e Desenvolvimento de Sistemas',
+                },
+                {
+                  label: 'Automação Industrial',
+                  value: 'Automação Industrial',
+                },
+                {
+                  label: 'Computação e Informática',
+                  value: 'Computação e Informática',
+                },
+                {
+                  label: 'Desenho de Construção Civil (PROEJA)',
+                  value: 'Desenho de Construção Civil (PROEJA)',
+                },
+                {
+                  label: 'Edificações',
+                  value: 'Edificações',
+                },
+                {
+                  label: 'Eletromecânica',
+                  value: 'Eletromecânica',
+                },
+                {
+                  label: 'Engenharia Civil',
+                  value: 'Engenharia Civil',
+                },
+                {
+                  label: 'Engenharia de Controle e Automação',
+                  value: 'Engenharia de Controle e Automação',
+                },
+                {
+                  label: 'Informática',
+                  value: 'Informática',
+                },
+                {
+                  label: 'Licenciatura em Matemática',
+                  value: 'Licenciatura em Matemática',
+                },
+                {
+                  label: 'Meio Ambiente (PROEJA)',
+                  value: 'Meio Ambiente (PROEJA)',
+                },
+              ]}
+            />
+          </Form.Item>
+
+          <Form.Item label="Data de publicação:">
+            <DatePicker
+              allowClear={false}
+              defaultValue={dayjs.utc(norm?.date)}
+              format={'DD/MM/YYYY'}
+              onChange={(value: any) => {
+                setNorm({
+                  ...norm,
+                  date: new Date(value).toISOString().split('T')[0],
+                  year: new Date(value).getFullYear(),
+                });
+              }}
+            />
+          </Form.Item>
+          <ConfirmEditButton>
+            <Button htmlType="submit" type="primary">
+              Salvar
+            </Button>
+          </ConfirmEditButton>
+        </Form>
+      </Modal>
+    </Container>
   );
 };
 

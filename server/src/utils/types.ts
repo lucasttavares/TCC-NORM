@@ -13,11 +13,14 @@ interface AdminI {
 }
 
 interface NormI {
+  _id: string;
+  pathFile: string;
   pdf: string;
   title: string;
+  diacriticTitle?: string;
   description: string;
-  date: string;
-  year: string;
+  date: Date;
+  year: number;
   type: string;
   course: string;
 }

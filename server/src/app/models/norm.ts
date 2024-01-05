@@ -7,6 +7,14 @@ const NormSchema = new Schema<NormI>({
     type: String,
     require: true,
   },
+  diacriticTitle: {
+    type: String,
+    required: true,
+  },
+  pathFile: {
+    type: String,
+    require: true,
+  },
   pdf: {
     type: String,
     require: true,
@@ -24,16 +32,16 @@ const NormSchema = new Schema<NormI>({
     require: true,
   },
   date: {
-    type: String,
+    type: Date,
     require: true,
   },
   year: {
-    type: String,
+    type: Number,
   },
 });
 NormSchema.index(
-  { pdf: 'text', title: 'text' },
-  { default_language: 'pt', weights: { title: 2, pdf: 1 } },
+  { title: 'text', pdf: 'text' },
+  { default_language: 'pt', weights: { title: 10, pdf: 5 } },
 );
 const Norm = mongoose.model('Norm', NormSchema);
 export default Norm;

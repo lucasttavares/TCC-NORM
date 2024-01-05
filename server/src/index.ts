@@ -1,15 +1,19 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
+import 'dotenv/config';
 
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 require('./app/routes/auths.routes')(app);
 require('./app/routes/norms.routes')(app);
 require('./app/routes/profile.routes')(app);
 
-app.listen(3001);
+app.use('/upload_file', express.static('upload_file'));
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server rodando na porta ${process.env.PORT}`);
+});

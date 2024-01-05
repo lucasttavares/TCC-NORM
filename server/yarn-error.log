@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn add diacritic-sensitive-regexp
+  /usr/bin/node /usr/bin/yarn add @types/get-file-object-from-local-path
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lucas/.fzf/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/diacritic-sensitive-regexp: Not found
+  Error: https://registry.yarnpkg.com/@types%2fget-file-object-from-local-path: Not found
       at params.callback [as _callback] (/usr/lib/node_modules/yarn/lib/cli.js:66145:18)
       at self.callback (/usr/lib/node_modules/yarn/lib/cli.js:140890:22)
       at Request.emit (node:events:514:28)
@@ -33,7 +33,8 @@ npm manifest:
     "description": "",
     "main": "index.ts",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "ts-node src/index.ts"
     },
     "keywords": [],
     "author": "",
@@ -51,7 +52,9 @@ npm manifest:
       "cors": "^2.8.5",
       "express": "^4.18.2",
       "express-handlebars": "^7.1.2",
+      "get-file-object-from-local-path": "^1.0.2",
       "jsonwebtoken": "^9.0.1",
+      "moment": "^2.29.4",
       "mongoose": "^7.4.3",
       "multer": "^1.4.5-lts.1",
       "nodemailer": "^6.9.4",
@@ -1538,6 +1541,13 @@ Lockfile:
       strip-ansi "^6.0.1"
       wide-align "^1.1.2"
   
+  get-file-object-from-local-path@^1.0.2:
+    version "1.0.2"
+    resolved "https://registry.yarnpkg.com/get-file-object-from-local-path/-/get-file-object-from-local-path-1.0.2.tgz#8acb699bda55e9af3aa9d0306dc873d4fc519e8d"
+    integrity sha512-gTOXvcQkzj5kDtLj4ELMYWWbuy+ufMf/c47q4yQ0JsHGaOrtq3lC5koM0hHkeUoSGkezVUb86zAERDpZi9aaXA==
+    dependencies:
+      mime-types "^2.1.28"
+  
   get-intrinsic@^1.0.2, get-intrinsic@^1.1.1, get-intrinsic@^1.1.3, get-intrinsic@^1.2.0, get-intrinsic@^1.2.1, get-intrinsic@^1.2.2:
     version "1.2.2"
     resolved "https://registry.yarnpkg.com/get-intrinsic/-/get-intrinsic-1.2.2.tgz#281b7622971123e1ef4b3c90fd7539306da93f3b"
@@ -2181,7 +2191,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
     integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
   
-  mime-types@~2.1.24, mime-types@~2.1.34:
+  mime-types@^2.1.28, mime-types@~2.1.24, mime-types@~2.1.34:
     version "2.1.35"
     resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.35.tgz#381a871b62a734450660ae3deee44813f70d959a"
     integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
@@ -2258,6 +2268,11 @@ Lockfile:
     version "1.0.4"
     resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
     integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+  
+  moment@^2.29.4:
+    version "2.29.4"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+    integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
   
   mongodb-connection-string-url@^2.6.0:
     version "2.6.0"

@@ -10,6 +10,7 @@ import {
 import { Button, Form, Input, notification } from 'antd';
 import api from '../../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { setStorage } from '../../../utils/storage';
 
 const LoginAdmin: React.FC = () => {
   const navigate = useNavigate();
@@ -24,8 +25,8 @@ const LoginAdmin: React.FC = () => {
       })
       .then(resp => {
         console.log(resp);
-        localStorage.setItem('token', 'Bearer ' + resp.data.token);
-        localStorage.setItem(
+        setStorage('token', 'Bearer ' + resp.data.token);
+        setStorage(
           `${process.env.REACT_APP_ADMIN_KEY}`,
           `${process.env.REACT_APP_ADMIN_VALUE}`,
         );

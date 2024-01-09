@@ -37,6 +37,7 @@ import Norm from '../../../components/Norm/Norm';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { MdLogout } from 'react-icons/md';
+import { clearStorage, getStorage } from '../../../utils/storage';
 
 const HomeAdmin: React.FC = () => {
   const navigate = useNavigate();
@@ -68,10 +69,10 @@ const HomeAdmin: React.FC = () => {
 
   useEffect(() => {
     search();
-  }, [norms, searchNorm, typeFilter, dateFilter, courseFilter]);
+  }, [searchNorm, typeFilter, dateFilter, courseFilter]);
 
   const logOut = () => {
-    localStorage.clear();
+    clearStorage();
     navigate('/');
   };
 
@@ -93,7 +94,7 @@ const HomeAdmin: React.FC = () => {
   const [date, setDate] = useState<any>();
 
   const handleSubmit = async () => {
-    const key = localStorage.getItem('token');
+    const key = getStorage('token');
 
     const formData = new FormData();
     if (pdf) {
@@ -125,7 +126,8 @@ const HomeAdmin: React.FC = () => {
           message: 'Token expirado',
           description: 'Por favor, faça login novamente',
         });
-        navigate('/admin');
+        clearStorage();
+        navigate('/');
       }
     }
   };
@@ -304,6 +306,9 @@ const HomeAdmin: React.FC = () => {
                     type={norm.type}
                     course={norm.course}
                     date={new Date(`${norm.date}`).toISOString().split('T')[0]}
+                    onEffect={() => {
+                      search();
+                    }}
                   />
                 ))
             ) : (

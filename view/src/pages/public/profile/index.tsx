@@ -3,12 +3,13 @@ import api from '../../../services/api';
 import { Container } from './styles';
 import { Alert, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { clearStorage, getStorage } from '../../../utils/storage';
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    const key = localStorage.getItem('token');
+    const key = getStorage('token');
     api
       .get('/projects', { headers: { Authorization: `${key}` } })
       .then(resp => {
@@ -16,7 +17,7 @@ const Profile: React.FC = () => {
       })
       .catch(err => {
         console.log(err);
-        localStorage.clear();
+        clearStorage();
       });
   }, [false]);
 
@@ -28,7 +29,7 @@ const Profile: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              localStorage.clear();
+              clearStorage();
             }}
             href="/"
           >

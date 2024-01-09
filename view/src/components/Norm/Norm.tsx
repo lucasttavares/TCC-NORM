@@ -16,6 +16,7 @@ import timezone from 'dayjs/plugin/timezone';
 import dayjs, { tz } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { FaRegTrashAlt, FaRegEdit } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 import {
   AdminOptions,
@@ -30,6 +31,7 @@ import {
   PopConfirmIcon,
   Title,
 } from './styles';
+import { clearStorage, getStorage } from '../../utils/storage';
 
 const Norm: React.FC<NormI> = ({
   _id,
@@ -39,12 +41,14 @@ const Norm: React.FC<NormI> = ({
   type,
   course,
   date,
-  isAdmin,
+  isAdmin = false,
+  onEffect,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [norm, setNorm] = useState<NormI>();
   const [editForm] = Form.useForm();
+  const navigate = useNavigate();
 
   const showModal = () => {
     setNorm({ ...norm, title, description, type, course, date });
@@ -55,16 +59,25 @@ const Norm: React.FC<NormI> = ({
     setIsModalOpen(false);
   };
 
-  const key = localStorage.getItem('token');
+  const key = getStorage('token');
 
   const deleteNorm = async (id: string) => {
-    const key = localStorage.getItem('token');
+    const key = getStorage('token');
     try {
       await api.delete(`/norm/deleteNorm/${id}`, {
         headers: { Authorization: `${key}` },
       });
-    } catch (err) {
+      onEffect?.();
+    } catch (err: any) {
       console.log(err);
+      if (err.response && err.response.status === 401) {
+        notification.warning({
+          message: 'Token expirado',
+          description: 'Por favor, faça login novamente',
+        });
+        clearStorage();
+        navigate('/');
+      }
     }
   };
 
@@ -81,9 +94,18 @@ const Norm: React.FC<NormI> = ({
         notification.success({
           message: 'Edição bem sucedida',
         });
+        onEffect?.();
       })
       .catch(err => {
         console.log(err);
+        if (err.response && err.response.status === 401) {
+          notification.warning({
+            message: 'Token expirado',
+            description: 'Por favor, faça login novamente',
+          });
+          clearStorage();
+          navigate('/');
+        }
       });
 
     console.log(id, norm?.title);

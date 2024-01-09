@@ -3,6 +3,7 @@ import { Container } from './styles';
 import { Button, Form, Input } from 'antd';
 import api from '../../../services/api';
 import { Link, useNavigate } from 'react-router-dom';
+import { setStorage } from '../../../utils/storage';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Login: React.FC = () => {
       })
       .then(resp => {
         console.log(resp);
-        localStorage.setItem('token', 'Bearer ' + resp.data.token);
+        setStorage('token', 'Bearer ' + resp.data.token);
 
         navigate('/');
       })

@@ -10,6 +10,7 @@ interface NormI {
   date?: string;
   year?: number;
   isAdmin?: boolean;
+  onEffect?: () => void;
 }
 
 interface AdminRouteI {

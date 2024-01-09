@@ -10,7 +10,7 @@ import Admin from '../models/admin';
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
-    expiresIn: 86400,
+    expiresIn: 7200,
   });
 }
 

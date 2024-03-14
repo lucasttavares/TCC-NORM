@@ -107,8 +107,6 @@ const Norm: React.FC<NormI> = ({
           navigate('/');
         }
       });
-
-    console.log(id, norm?.title);
     setIsModalOpen(false);
   };
 
@@ -165,6 +163,7 @@ const Norm: React.FC<NormI> = ({
         open={isModalOpen}
         onCancel={handleCancel}
         footer={false}
+        forceRender
       >
         <Form
           layout="vertical"
@@ -215,6 +214,14 @@ const Norm: React.FC<NormI> = ({
                   label: 'Lista',
                   value: 'Lista',
                 },
+                {
+                  label: 'Resolução',
+                  value: 'Resolução',
+                },
+                {
+                  label: 'Ofício',
+                  value: 'Ofício',
+                },
               ]}
             />
           </Form.Item>
@@ -241,10 +248,6 @@ const Norm: React.FC<NormI> = ({
                 {
                   label: 'Computação e Informática',
                   value: 'Computação e Informática',
-                },
-                {
-                  label: 'Desenho de Construção Civil (PROEJA)',
-                  value: 'Desenho de Construção Civil (PROEJA)',
                 },
                 {
                   label: 'Edificações',
@@ -281,7 +284,7 @@ const Norm: React.FC<NormI> = ({
           <Form.Item label="Data de publicação:">
             <DatePicker
               allowClear={false}
-              defaultValue={dayjs.utc(norm?.date)}
+              defaultValue={dayjs.utc(date)}
               format={'DD/MM/YYYY'}
               onChange={(value: any) => {
                 setNorm({

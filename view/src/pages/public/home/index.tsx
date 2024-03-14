@@ -38,7 +38,6 @@ const Home: React.FC = () => {
       }
 
       const resp = await api.get(requestPath);
-      console.log(requestPath);
       setNorms(resp.data);
     } catch (err) {
       console.log(err);
@@ -97,6 +96,14 @@ const Home: React.FC = () => {
                     label: 'Lista',
                     value: '=Lista',
                   },
+                  {
+                    label: 'Resolução',
+                    value: '=Resolução',
+                  },
+                  {
+                    label: 'Ofício',
+                    value: '=Ofício',
+                  },
                 ]}
               />
             </FormItem>
@@ -113,20 +120,20 @@ const Home: React.FC = () => {
                     value: '',
                   },
                   {
-                    label: '2020',
-                    value: '=2020',
+                    label: '2024',
+                    value: '=2024',
                   },
                   {
-                    label: '2021',
-                    value: '=2021',
+                    label: '2023',
+                    value: '=2023',
                   },
                   {
                     label: '2022',
                     value: '=2022',
                   },
                   {
-                    label: '2023',
-                    value: '=2023',
+                    label: '2021',
+                    value: '=2021',
                   },
                 ]}
               />

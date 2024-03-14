@@ -97,6 +97,7 @@ const NormsContainer = styled.div`
   padding: 2%;
   border-radius: 1;
   box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
+  margin-bottom: 2%;
 `;
 
 const EmptyList = styled.p`

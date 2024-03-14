@@ -24,7 +24,6 @@ const LoginAdmin: React.FC = () => {
         password,
       })
       .then(resp => {
-        console.log(resp);
         setStorage('token', 'Bearer ' + resp.data.token);
         setStorage(
           `${process.env.REACT_APP_ADMIN_KEY}`,

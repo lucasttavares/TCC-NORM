@@ -60,7 +60,6 @@ const HomeAdmin: React.FC = () => {
       }
 
       const resp = await api.get(requestPath);
-      console.log(requestPath);
       setNorms(resp.data);
     } catch (err) {
       console.log(err);
@@ -69,7 +68,7 @@ const HomeAdmin: React.FC = () => {
 
   useEffect(() => {
     search();
-  }, [searchNorm, typeFilter, dateFilter, courseFilter]);
+  }, [norms, searchNorm, typeFilter, dateFilter, courseFilter]);
 
   const logOut = () => {
     clearStorage();
@@ -112,7 +111,6 @@ const HomeAdmin: React.FC = () => {
           Authorization: `${key}`,
         },
       });
-      console.log(resp);
       notification.success({
         message: 'Publicação bem sucedida',
       });
@@ -183,6 +181,14 @@ const HomeAdmin: React.FC = () => {
                     label: 'Lista',
                     value: '=Lista',
                   },
+                  {
+                    label: 'Resolução',
+                    value: '=Resolução',
+                  },
+                  {
+                    label: 'Ofício',
+                    value: '=Ofício',
+                  },
                 ]}
               />
             </FormItem>
@@ -199,24 +205,20 @@ const HomeAdmin: React.FC = () => {
                     value: '',
                   },
                   {
-                    label: '2020',
-                    value: '=2020',
-                  },
-                  {
-                    label: '2021',
-                    value: '=2021',
-                  },
-                  {
-                    label: '2022',
-                    value: '=2022',
+                    label: '2024',
+                    value: '=2024',
                   },
                   {
                     label: '2023',
                     value: '=2023',
                   },
                   {
-                    label: '2024',
-                    value: '=2024',
+                    label: '2022',
+                    value: '=2022',
+                  },
+                  {
+                    label: '2021',
+                    value: '=2021',
                   },
                 ]}
               />
@@ -248,10 +250,6 @@ const HomeAdmin: React.FC = () => {
                   {
                     label: 'Computação e Informática',
                     value: '=Computação e Informática',
-                  },
-                  {
-                    label: 'Desenho de Construção Civil (PROEJA)',
-                    value: '=Desenho de Construção Civil (PROEJA)',
                   },
                   {
                     label: 'Edificações',
@@ -334,7 +332,6 @@ const HomeAdmin: React.FC = () => {
         }}
         footer={false}
         width={'40%'}
-        centered
         destroyOnClose
       >
         <Form layout="vertical" form={form} onFinish={() => handleSubmit()}>
@@ -345,6 +342,7 @@ const HomeAdmin: React.FC = () => {
           >
             <Input
               placeholder="Digite o titulo do documento"
+              autoComplete="off"
               value={title}
               onChange={e => {
                 setTitle(e.target.value);
@@ -429,6 +427,14 @@ const HomeAdmin: React.FC = () => {
                     label: 'Lista',
                     value: 'Lista',
                   },
+                  {
+                    label: 'Resolução',
+                    value: 'Resolução',
+                  },
+                  {
+                    label: 'Ofício',
+                    value: 'Ofício',
+                  },
                 ]}
               />
             </SelectFormItem>
@@ -463,10 +469,6 @@ const HomeAdmin: React.FC = () => {
                   {
                     label: 'Computação e Informática',
                     value: 'Computação e Informática',
-                  },
-                  {
-                    label: 'Desenho de Construção Civil (PROEJA)',
-                    value: 'Desenho de Construção Civil (PROEJA)',
                   },
                   {
                     label: 'Edificações',

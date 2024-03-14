@@ -6,6 +6,7 @@ export default class NormView {
     return {
       _id: norm._id,
       link: `http://localhost:${process.env.PORT}/${norm.pathFile}`,
+      // pdf: norm.pdf,
       title: norm.title,
       description: norm.description,
       type: norm.type,

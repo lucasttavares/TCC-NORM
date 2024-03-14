@@ -4,6 +4,8 @@ import Norm from '../models/norm';
 import { diacriticRegex } from '../../utils/diacritic-regex';
 import * as fs from 'fs';
 import NormView from '../models/view/normView';
+import { FilterQuery } from 'mongoose';
+import { NormI } from '../../utils/types';
 
 export const postNorm = async (request: Request, response: Response) => {
   const pdf = request.file;
@@ -76,20 +78,38 @@ export const deleteNorm = async (request: Request, response: Response) => {
 };
 
 export const searchNorm = async (request: Request, response: Response) => {
-  const searchPdf = request.params.term;
-  const searchTitle = request.params.term;
+  const searchTerm = request.params.term;
   const { year, type, course } = request.query;
 
   try {
-    const query: any = {
+    const query: FilterQuery<NormI> = {
       $text: {
-        $search: `${searchTitle}${searchPdf}`,
+        $search: `${searchTerm}`,
         $caseSensitive: false,
         $diacriticSensitive: false,
       },
     };
 
-    let regexQuery: any = {};
+    const score: FilterQuery<NormI> = { score: { $meta: 'textScore' } };
+
+    let regexQuery: FilterQuery<NormI> = {
+      diacriticTitle: {
+        $regex: `${diacriticRegex(searchTerm)}`,
+        $options: 'i',
+      },
+    };
+
+    /*     let regexQuery: any = {
+      $or: [
+        {
+          diacriticTitle: {
+            $regex: diacriticRegex(searchTerm),
+            $options: 'i',
+          },
+        },
+        { pdf: { $regex: diacriticRegex(searchTerm), $options: 'i' } },
+      ],
+    }; */
 
     if (year) {
       query.year = year;
@@ -104,23 +124,13 @@ export const searchNorm = async (request: Request, response: Response) => {
       regexQuery.course = course;
     }
 
-    const norms = await Norm.find(query);
+    const norms = await Norm.find(query).sort(score);
 
-    let regexSearch = await Norm.find({
-      $or: [
-        { pdf: { $regex: diacriticRegex(searchPdf), $options: 'i' } },
-        {
-          diacriticTitle: {
-            $regex: diacriticRegex(searchTitle),
-            $options: 'i',
-          },
-        },
-      ],
-    });
+    const regexSearch = await Norm.find(regexQuery);
 
     norms.length > 0
       ? response.status(200).send(NormView.manyNormView(norms))
-      : response.status(200).send(NormView.manyNormView(regexSearch));
+      : response.status(202).send(NormView.manyNormView(regexSearch));
   } catch (err) {
     console.log(err);
     response.status(400).json({ error: 'Erro ao encontrar' });
